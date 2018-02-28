@@ -16,9 +16,12 @@ module.controller('KbnPolarVisController', function ($scope, $element, Private) 
 
   var Chartjs = require('chart.js');
 
-  //const randomColor = require('randomcolor');
+  const randomColor = require('randomcolor');
 
   $scope.$watchMulti(['esResponse'], function ([resp]) {
+    if($scope.polarchart){
+      $scope.polarchart.destroy()
+    }
 
     if(resp){
       var id_firstfield = '0'
@@ -46,13 +49,27 @@ module.controller('KbnPolarVisController', function ($scope, $element, Private) 
       }
 
 
-
-      var dataParsed = resp.tables[0].rows.map(function(bucket) {
-
-      });
+      var labels = []
+      var dataParsed = [];
+      for (let index = 0; index < resp.tables[0].rows.length; index++) {
+        const bucket = resp.tables[0].rows[index];
+        labels.push(bucket[0])
+        dataParsed.push(bucket[1])
+      }
+      var colors = randomColor({ hue: 'random', luminosity: 'bright', count: 54 });
+      var dataComplete = {
+        datasets: [{
+          data: dataParsed,
+          backgroundColor: colors //["rgb(255, 99, 132)", "rgb(75, 192, 192)", "rgb(255, 205, 86)", "rgb(201, 203, 207)", "rgb(54, 162, 235)"]
+        }],
+        labels: labels
+      }
     }
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var dataExample = {
+
+    var canvas = document.getElementById('polar_chart');
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    /*var dataExample = {
       datasets: [{
         data: [10, 20, 30]
       }],
@@ -63,10 +80,16 @@ module.controller('KbnPolarVisController', function ($scope, $element, Private) 
         'Yellow',
         'Blue'
       ]
-    };
+    };*/
+    /*var options = {
+      backgroundColor: [
+        'red',
+        'blue'
+      ]
+    }*/
 
-    new Chart(ctx, {
-      data: dataExample,
+    $scope.polarchart = new Chartjs(ctx, {
+      data: dataComplete,
       type: 'polarArea'
       //options: options
     });
