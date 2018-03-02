@@ -8,7 +8,7 @@ const module = uiModules.get('kibana/kbn_polar', ['kibana']);
 
 // add a controller to tha module, which will transform the esResponse into a
 // tabular format that we can pass to the table directive
-module.controller('KbnPolarVisController', function ($scope, $element, Private) {
+module.controller('KbnPolarVisController', function ($scope, $element, $timeout, Private) {
   const tabifyAggResponse = Private(AggResponseTabifyProvider);
 
   const uiStateSort = ($scope.uiState) ? $scope.uiState.get('vis.params.sort') : {};
@@ -66,33 +66,37 @@ module.controller('KbnPolarVisController', function ($scope, $element, Private) 
       }
     }
 
-    var canvas = document.getElementById('polar_chart');
-    var ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    /*var dataExample = {
-      datasets: [{
-        data: [10, 20, 30]
-      }],
+    $timeout(function () {
+      //DOM has finished rendering
+      var canvas = document.getElementById('polar_chart_' + $scope.$id);
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      /*var dataExample = {
+        datasets: [{
+          data: [10, 20, 30]
+        }],
+  
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: [
+          'Red',
+          'Yellow',
+          'Blue'
+        ]
+      };*/
+      var options = {
+        legend: {
+          display: false
+        }
+      }
 
-      // These labels appear in the legend and in the tooltips when hovering different arcs
-      labels: [
-        'Red',
-        'Yellow',
-        'Blue'
-      ]
-    };*/
-    /*var options = {
-      backgroundColor: [
-        'red',
-        'blue'
-      ]
-    }*/
-
-    $scope.polarchart = new Chartjs(ctx, {
-      data: dataComplete,
-      type: 'polarArea'
-      //options: options
+      $scope.polarchart = new Chartjs(ctx, {
+        data: dataComplete,
+        type: 'polarArea',
+        options: options
+      });
     });
+
+
 
   });
 });
