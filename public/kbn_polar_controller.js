@@ -56,7 +56,7 @@ module.controller('KbnPolarVisController', function ($scope, $element, $timeout,
         labels.push(bucket[0])
         dataParsed.push(bucket[1])
       }
-      var colors = randomColor({ hue: 'random', luminosity: 'bright', count: 54 });
+      var colors = randomColor({ hue: 'random', luminosity: 'bright', count: 200 });
       var dataComplete = {
         datasets: [{
           data: dataParsed,
@@ -71,18 +71,6 @@ module.controller('KbnPolarVisController', function ($scope, $element, $timeout,
       var canvas = document.getElementById('polar_chart_' + $scope.$id);
       var ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      /*var dataExample = {
-        datasets: [{
-          data: [10, 20, 30]
-        }],
-  
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-          'Red',
-          'Yellow',
-          'Blue'
-        ]
-      };*/
       var options = {
         legend: {
           display: false
