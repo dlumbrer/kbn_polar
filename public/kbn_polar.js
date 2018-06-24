@@ -7,7 +7,7 @@ import 'ui/agg_table/agg_table_group';
 
 import { CATEGORY } from 'ui/vis/vis_category';
 import { VisFactoryProvider } from 'ui/vis/vis_factory';
-import { VisSchemasProvider } from 'ui/vis/editors/default/schemas';
+import { Schemas } from 'ui/vis/editors/default/schemas';
 import PolarVisTemplate from 'plugins/kbn_polar/kbn_polar.html';
 import { VisTypesRegistryProvider } from 'ui/registry/vis_types';
 import image from './images/polar.svg';
@@ -25,7 +25,6 @@ VisTypesRegistryProvider.register(PolarVisTypeProvider);
 // define the PolarVisType
 function PolarVisTypeProvider(Private) {
   const VisFactory = Private(VisFactoryProvider);
-  const Schemas = Private(VisSchemasProvider);
 
   // define the PolarVisController which is used in the template
   // by angular's ng-controller directive
@@ -49,7 +48,10 @@ function PolarVisTypeProvider(Private) {
           title: 'Metric',
           aggFilter: '!geo_centroid',
           min: 1,
-          max: 1
+          max: 1,
+          defaults: [
+            { type: 'count', schema: 'metric' }
+          ]
         },
         {
           group: 'buckets',
