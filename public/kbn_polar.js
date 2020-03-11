@@ -1,11 +1,6 @@
 import 'plugins/kbn_polar/kbn_polar.less';
-import 'plugins/kbn_polar/kbn_polar_controller';
-import 'ui/agg_table';
-import 'ui/agg_table/agg_table_group';
-import 'ui/agg_table';
-import 'ui/agg_table/agg_table_group';
 
-import { CATEGORY } from 'ui/vis/vis_category';
+import { KbnPolarVisController } from './kbn_polar_controller';
 import { VisFactoryProvider } from 'ui/vis/vis_factory';
 import { Schemas } from 'ui/vis/editors/default/schemas';
 import PolarVisTemplate from 'plugins/kbn_polar/kbn_polar.html';
@@ -36,7 +31,6 @@ function PolarVisTypeProvider(Private) {
     title: 'Polar',
     image,
     description: 'Display values in a polar chart',
-      category: CATEGORY.BASIC,
     visConfig: {
       template: PolarVisTemplate
     },

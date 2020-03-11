@@ -21,12 +21,6 @@ module.controller('KbnPolarVisController', function ($scope, $element, $timeout,
     }
 
     if(resp){
-      var id_firstfield = '0'
-      var id_secondfield;
-      var id_x = '1'
-      var id_y = '2'
-      var id_size = '3'
-      var dicColor = {}
       //Names of the field that have been selected
       if ($scope.vis.aggs.bySchemaName['field']) {
         var firstFieldAggId = $scope.vis.aggs.bySchemaName['field'][0].id;
@@ -37,6 +31,7 @@ module.controller('KbnPolarVisController', function ($scope, $element, $timeout,
       // Retrieve the metrics aggregation configured
       if($scope.vis.aggs.bySchemaName['metric']){
         var metricsAgg_xAxis = $scope.vis.aggs.bySchemaName['metric'][0];
+        var id_metric = $scope.vis.aggs.bySchemaName['metric'][0].id;
         if ($scope.vis.aggs.bySchemaName['metric'][0].type.name != "count"){
           var metricsAgg_xAxis_name = $scope.vis.aggs.bySchemaName['metric'][0].params.field.displayName;
         }else{
@@ -45,19 +40,28 @@ module.controller('KbnPolarVisController', function ($scope, $element, $timeout,
         var metricsAgg_xAxis_title = $scope.vis.aggs.bySchemaName['metric'][0].type.title
       }
 
+      // Get col ids
+      let col_id_firstfield, col_id_metric;
+      resp.columns.forEach(e => {
+        if (id_metric === e.aggConfig.id){
+          col_id_metric = e.id
+        }else if (firstFieldAggId === e.aggConfig.id){
+          col_id_firstfield = e.id
+        }
+      });
 
       var labels = []
       var dataParsed = [];
-      for (let index = 0; index < resp.tables[0].rows.length; index++) {
-        const bucket = resp.tables[0].rows[index];
-        labels.push(bucket[0])
-        dataParsed.push(bucket[1])
+      for (let index = 0; index < resp.rows.length; index++) {
+        const bucket = resp.rows[index];
+        labels.push(bucket[col_id_firstfield])
+        dataParsed.push(bucket[col_id_metric])
       }
       var colors = randomColor({ hue: 'random', luminosity: 'bright', count: 200 });
       var dataComplete = {
         datasets: [{
           data: dataParsed,
-          backgroundColor: colors //["rgb(255, 99, 132)", "rgb(75, 192, 192)", "rgb(255, 205, 86)", "rgb(201, 203, 207)", "rgb(54, 162, 235)"]
+          backgroundColor: colors
         }],
         labels: labels
       }
