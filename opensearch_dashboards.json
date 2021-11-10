@@ -1,0 +1,17 @@
+{
+  "id": "kbnPolar",
+  "version": "1.0.0",
+  "opensearchDashboardsVersion": "opensearchDashboards",
+  "server": false,
+  "ui": true,
+  "requiredPlugins": [
+    "navigation",
+    "visualizations",
+    "data",
+    "inspector",
+    "opensearchDashboardsUtils",
+    "opensearchDashboardsLegacy",
+    "share",
+    "visDefaultEditor"
+  ]
+}

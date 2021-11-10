@@ -35,7 +35,7 @@ function KbnPolarVisController($scope, config, $timeout) {
 
     if (resp) {
       //Names of the field that have been selected
-      if (resp.aggs.bySchemaName('field')) {
+      if (resp.aggs.bySchemaName('field')[0]) {
         var firstFieldAggId = resp.aggs.bySchemaName('field')[0].id;
         var fieldAggName = resp.aggs.bySchemaName('field')[0].params.field.displayName;
       }
@@ -58,7 +58,9 @@ function KbnPolarVisController($scope, config, $timeout) {
       for (let index = 0; index < resp.tables[0].rows.length; index++) {
         const bucket = resp.tables[0].rows[index];
         labels.push(bucket[0].value)
-        dataParsed.push(bucket[1].value)
+        if (bucket[1]) {
+          dataParsed.push(bucket[1].value)
+        }
       }
       var colors = randomColor({ hue: 'random', luminosity: 'bright', count: 200 });
       var dataComplete = {
